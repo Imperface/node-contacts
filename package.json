@@ -17,10 +17,5 @@
   "license": "ISC",
   "devDependencies": {
     "nodemon": "^3.0.2"
-  },
-  "nodemonConfig": {
-    "ignore": [
-      "./models/contacts.json"
-    ]
   }
 }
