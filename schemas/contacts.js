@@ -32,5 +32,4 @@ const contactUpdateSchema = Joi.object({
     "string.empty": `phone cannot be an empty field`,
   }),
 });
-
 module.exports = { contactAddSchema, contactUpdateSchema };
