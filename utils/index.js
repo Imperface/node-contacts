@@ -1,8 +1,11 @@
-const checkDublicateName = (name, data) =>
-  data.find(
-    (item) => item.name.toLowerCase().trim() === name.toLowerCase().trim()
-  );
+const HttpError = require("./HttpError");
+const controllerWrapper = require("./controllerWrapper");
+const modelWrapper = require("./modelWrapper");
+const checkDuplicateName = require("./checkName");
 
 module.exports = {
-  checkDublicateName,
+  HttpError,
+  controllerWrapper,
+  modelWrapper,
+  checkDuplicateName,
 };

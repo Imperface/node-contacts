@@ -1,135 +1,125 @@
 const { randomUUID } = require("node:crypto");
 
+const { modelWrapper } = require("../utils");
+
 const fs = require("node:fs/promises");
 const path = require("node:path");
 
-const contactsDataPath = path.join(__dirname, "./", "contacts.json");
+const contactsDataPath = path.join(__dirname, "./contacts.json");
 
-const listContacts = async () => {
-  try {
-    // get json contacts
-    const data = await fs.readFile(contactsDataPath, { encoding: "utf-8" });
+const listContactsModel = async () => {
+  //! DECORATOR USED
 
-    // return parsed contacts
-    return JSON.parse(data);
-  } catch (error) {
-    throw new Error();
-  }
+  // get contacts
+  const data = await fs.readFile(contactsDataPath, { encoding: "utf-8" });
+  // return parsed contacts
+  return JSON.parse(data);
 };
 
-const writeContacts = async (contacts) => {
-  try {
-    // JSON.stringify data and write to contacts.json
-    await fs.writeFile(
-      contactsDataPath,
-      JSON.stringify(contacts, undefined, 2)
-    );
-  } catch (error) {
-    throw new Error();
-  }
+const writeContactsModel = async (contacts) => {
+  // JSON.stringify contacts and write to contacts.json
+  await fs.writeFile(contactsDataPath, JSON.stringify(contacts, undefined, 2));
 };
 
-const getContactById = async (contactId) => {
-  try {
-    // get contacts list
-    const contacts = await listContacts();
+const getContactByIdModel = async (contactId) => {
+  //! DECORATOR USED
 
-    // looking for contact with id === contactId
-    const foundContact = contacts.find((contact) => contact.id === contactId);
+  // get contacts
+  const contacts = await listContactsModel();
 
-    // is contact found, return contact, else return null
-    return foundContact ?? null;
-  } catch (error) {
-    throw new Error();
-  }
+  // looking for contact with id === contactId
+  const foundContact = contacts.find((contact) => contact.id === contactId);
+
+  // if contact found - return contact, else return null
+  return foundContact ?? null;
 };
 
-const removeContact = async (contactId) => {
-  try {
-    // get contacts list
-    const contacts = await listContacts();
+const addContactModel = async ({ name, email, phone }) => {
+  //! DECORATOR USED
 
-    // looking for contact with id === contactId
-    const removeIndex = contacts.findIndex((item) => item.id === contactId);
+  // get contacts
+  const contactsData = await listContactsModel();
 
-    // if removeIndex === -1, return null, else return contact with id === contactId
-    if (removeIndex === -1) {
-      return null;
-    }
+  // create new contact
+  const newContact = { name, email, phone, id: randomUUID() };
 
-    // create new array without element with index removeIndex
-    const newContacts = [
-      ...contacts.slice(0, removeIndex),
-      ...contacts.slice(removeIndex + 1),
-    ];
+  // create new contacts with new contact
+  const newContactsData = [newContact, ...contactsData];
 
-    // write new array to contacts.json
-    await writeContacts(newContacts);
+  // write new contacts to contacts.json
+  await writeContactsModel(newContactsData);
 
-    return contacts[removeIndex];
-  } catch (error) {
-    throw new Error();
-  }
+  return newContact;
 };
 
-const addContact = async ({ name, email, phone, id }) => {
-  try {
-    // get contacts list
-    const contactsData = await listContacts();
+const removeContactModel = async (contactId) => {
+  //! DECORATOR USED
 
-    // create new contact with id from props or random id
-    const newContact = { name, email, phone, id: id ?? randomUUID() };
+  // get contacts
+  const contacts = await listContactsModel();
 
-    // create new contact list with new contact
-    const newContactsData = [newContact, ...contactsData];
+  // looking for contact index with id === contactId
+  const removeIndex = contacts.findIndex((item) => item.id === contactId);
 
-    // write new array to contacts.json
-    await writeContacts(newContactsData);
-
-    return newContact;
-  } catch (error) {
-    throw new Error();
+  // return null if contact not found
+  if (removeIndex === -1) {
+    return null;
   }
+
+  // create new contacts without contact with index removeIndex
+  const newContacts = [
+    ...contacts.slice(0, removeIndex),
+    ...contacts.slice(removeIndex + 1),
+  ];
+
+  // write new contacts to contacts.json
+  await writeContactsModel(newContacts);
+
+  return contacts[removeIndex];
 };
 
-const updateContact = async (contactId, body) => {
-  try {
-    // try to find contact with id === contactId
-    const selectedContact = await getContactById(contactId);
+const updateContactModel = async (contactId, body) => {
+  //! DECORATOR USED
 
-    // if contact with id === contactId not found, return null
-    if (!selectedContact) {
-      return null;
-    }
+  // get contacts
+  const contacts = await listContactsModel();
 
-    // destruct property from current contact
-    const { name, email, phone, id } = selectedContact;
+  // looking for contact index with id === contactId
+  const updateIndex = contacts.findIndex((item) => item.id === contactId);
 
-    // create new contact, if property not passed, get this prop from current contact
-    const updatedContact = {
-      name: body.name ?? name,
-      email: body.email ?? email,
-      phone: body.phone ?? phone,
-      id,
-    };
-
-    // remove current contact
-    await removeContact(contactId);
-
-    // try to add contact
-    const addUpdatedContact = await addContact(updatedContact);
-
-    return addUpdatedContact;
-  } catch (error) {
-    throw new Error();
+  // return null if contact not found
+  if (updateIndex === -1) {
+    return null;
   }
+
+  // destructuring the current contact
+  const { name, email, phone, id } = contacts[updateIndex];
+
+  // create new contact, if property not passed, get this prop from current contact
+  const updatedContact = {
+    name: body.name ?? name,
+    email: body.email ?? email,
+    phone: body.phone ?? phone,
+    id,
+  };
+
+  // create new contacts with updated contact with index updateIndex
+  const newContacts = [
+    ...contacts.slice(0, updateIndex),
+    updatedContact,
+    ...contacts.slice(updateIndex + 1),
+  ];
+
+  // write new contacts to contacts.json
+  await writeContactsModel(newContacts);
+
+  return updatedContact;
 };
 
 module.exports = {
-  listContacts,
-  writeContacts,
-  getContactById,
-  removeContact,
-  addContact,
-  updateContact,
+  listContactsModel: modelWrapper(listContactsModel),
+  getContactByIdModel: modelWrapper(getContactByIdModel),
+  addContactModel: modelWrapper(addContactModel),
+  removeContactModel: modelWrapper(removeContactModel),
+  updateContactModel: modelWrapper(updateContactModel),
 };

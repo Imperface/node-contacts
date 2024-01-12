@@ -31,5 +31,10 @@ const contactUpdateSchema = Joi.object({
     "string.base": `phone should be a type of 'string'`,
     "string.empty": `phone cannot be an empty field`,
   }),
-});
+})
+  .min(1)
+  .messages({
+    "object.min": "body cannot be empty",
+  });
+
 module.exports = { contactAddSchema, contactUpdateSchema };
