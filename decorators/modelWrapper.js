@@ -1,4 +1,4 @@
-const HttpError = require("./HttpError");
+const { HttpError } = require("../utils");
 
 const modelWrapper = (model) => {
   const wrapper = async (req, res, next) => {
