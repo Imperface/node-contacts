@@ -6,11 +6,7 @@ const { validateBody } = require("../middlewares");
 
 const contactsCtrl = require("../controllers/contacts");
 
-const {
-  contactsAddSchema,
-  contactsUpdateSchema,
-  contactsUpdateStatusSchema,
-} = require("../schemas/contacts");
+const schemas = require("../schemas/contacts");
 
 const jsonParser = express.json();
 
@@ -21,7 +17,7 @@ router.get("/:contactId", contactsCtrl.getContactById);
 router.post(
   "/",
   jsonParser,
-  validateBody(contactsAddSchema),
+  validateBody(schemas.contactsAddSchema),
   contactsCtrl.addContact
 );
 
@@ -30,16 +26,14 @@ router.delete("/:contactId", contactsCtrl.removeContact);
 router.put(
   "/:contactId",
   jsonParser,
-  validateBody(contactsUpdateSchema),
+  validateBody(schemas.contactsUpdateSchema),
   contactsCtrl.updateContact
 );
-
-// validateBody(contactsUpdateStatusSchema);
 
 router.patch(
   "/:contactId/favorite",
   jsonParser,
-  validateBody(contactsUpdateStatusSchema),
+  validateBody(schemas.contactsUpdateStatusSchema),
   contactsCtrl.updateContactStatus
 );
 

@@ -27,7 +27,7 @@ const getContactById = async (req, res, next) => {
 
   // send response 404 error if contact not found
   if (contactById === null) {
-    throw HttpError(404, "Not found");
+    throw HttpError(404, "not found");
   }
 
   // send response with contact
@@ -61,7 +61,7 @@ const removeContact = async (req, res, next) => {
 
   // send response 404 error if contact not found
   if (removeContact === null) {
-    throw HttpError(404, "Not found");
+    throw HttpError(404, "not found");
   }
 
   // send response with contact
@@ -83,19 +83,13 @@ const updateContact = async (req, res, next) => {
   // update contact
   const updatedContact = await Contact.findByIdAndUpdate(
     { _id: contactId },
-    {
-      name,
-      email,
-      phone,
-    },
-    {
-      new: true,
-    }
+    { name, email, phone },
+    { new: true }
   );
 
   // send response 404 error if contact not found
   if (updatedContact === null) {
-    throw HttpError(404, "Not found");
+    throw HttpError(404, "not found");
   }
 
   res.status(200).json(updatedContact);
@@ -117,17 +111,13 @@ const updateContactStatus = async (req, res, next) => {
 
   // send response 404 error if contact not found
   if (contactById === null) {
-    throw HttpError(404, "Not found");
+    throw HttpError(404, "not found");
   }
 
   const updatedContact = await Contact.findByIdAndUpdate(
     { _id: contactId },
-    {
-      favorite,
-    },
-    {
-      new: true,
-    }
+    { favorite },
+    { new: true }
   );
 
   res.status(200).json(updatedContact);

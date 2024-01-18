@@ -23,16 +23,12 @@ app.use(cors());
 app.use("/api", routes);
 
 app.use((error, res, next) => {
-  res.status(404).json({
-    message: "Use api on routes: /api/contacts",
-  });
+  res.status(404).json({ message: "Use api on routes: /api/contacts" });
 });
 
 app.use((error, req, res, next) => {
   const { status = 500, message = "Internal Server Error" } = error;
-  res.status(status).json({
-    message,
-  });
+  res.status(status).json({ message });
 });
 
 module.exports = app;
