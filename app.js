@@ -23,7 +23,7 @@ app.use(cors());
 app.use("/api", routes);
 
 app.use((error, res, next) => {
-  res.status(404).json({ message: "Route not found." });
+  res.status(404).json({ message: "Use api on routes: /api/contacts" });
 });
 
 app.use((error, req, res, next) => {
