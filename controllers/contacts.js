@@ -6,8 +6,10 @@ const Contact = require("../models/contact");
 const listContacts = async (req, res, next) => {
   //! DECORATOR USED
 
+  const { _id: owner } = req.user;
+
   // get contacts
-  const contacts = await Contact.find();
+  const contacts = await Contact.find({ owner });
 
   // send response
   res.status(200).json(contacts);
@@ -40,8 +42,10 @@ const addContact = async (req, res, next) => {
   // get params from request
   const { name, email, phone } = req.body;
 
+  const { _id: owner } = req.user;
+
   // add contact
-  const addedContact = await Contact.create({ name, email, phone });
+  const addedContact = await Contact.create({ name, email, phone, owner });
 
   // send response with contact
   res.status(201).json(addedContact);
