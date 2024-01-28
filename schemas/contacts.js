@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const { emailRegex } = require("../constants");
 
 const contactsAddSchema = Joi.object({
   name: Joi.string().trim().required().messages({
@@ -6,10 +7,11 @@ const contactsAddSchema = Joi.object({
     "string.empty": `name cannot be an empty field`,
     "any.required": `missing required name field`,
   }),
-  email: Joi.string().email().required().messages({
+  email: Joi.string().pattern(emailRegex).required().messages({
     "string.base": `email should be a type of 'email'`,
     "string.empty": `email cannot be an empty field`,
     "any.required": `missing required email field`,
+    "string.pattern.base": "wrong email format",
   }),
   phone: Joi.string().trim().required().messages({
     "string.base": `phone should be a type of 'string'`,
@@ -24,9 +26,10 @@ const contactsUpdateSchema = Joi.object({
     "string.base": `name should be a type of 'string'`,
     "string.empty": `name cannot be an empty field`,
   }),
-  email: Joi.string().email().messages({
+  email: Joi.string().pattern(emailRegex).messages({
     "string.base": `email should be a type of 'email'`,
     "string.empty": `email cannot be an empty field`,
+    "string.pattern.base": "wrong email format",
   }),
   phone: Joi.string().trim().messages({
     "string.base": `phone should be a type of 'string'`,

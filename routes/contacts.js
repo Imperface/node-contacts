@@ -12,7 +12,7 @@ const jsonParser = express.json();
 
 router.get("/", authenticate, contactsCtrl.listContacts);
 
-router.get("/:contactId", contactsCtrl.getContactById);
+router.get("/:contactId", authenticate, contactsCtrl.getContactById);
 
 router.post(
   "/",
@@ -22,11 +22,12 @@ router.post(
   contactsCtrl.addContact
 );
 
-router.delete("/:contactId", contactsCtrl.removeContact);
+router.delete("/:contactId", authenticate, contactsCtrl.removeContact);
 
 router.put(
   "/:contactId",
   jsonParser,
+  authenticate,
   validateBody(schemas.contactsUpdateSchema),
   contactsCtrl.updateContact
 );
@@ -34,6 +35,7 @@ router.put(
 router.patch(
   "/:contactId/favorite",
   jsonParser,
+  authenticate,
   validateBody(schemas.contactsUpdateStatusSchema),
   contactsCtrl.updateContactStatus
 );

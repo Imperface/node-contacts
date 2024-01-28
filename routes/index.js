@@ -4,13 +4,13 @@ const router = express.Router();
 // import contact routes
 const contactRoutes = require("./contacts");
 
-// import auth routes
-const authRouter = require("./auth");
+// import users routes
+const usersRouter = require("./users");
 
 // use contacts routes if path with /contacts
 router.use("/contacts", contactRoutes);
 
-// use auth routes if path with /auth
-router.use("/auth", authRouter);
+// use users routes if path with /users
+router.use("/users", usersRouter);
 
 module.exports = router;

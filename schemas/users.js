@@ -1,6 +1,6 @@
 const Joi = require("joi");
-const emailRegex =
-  /^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
+
+const { emailRegex } = require("../constants");
 
 const userSchema = Joi.object({
   email: Joi.string().pattern(emailRegex).required().messages({
@@ -14,9 +14,19 @@ const userSchema = Joi.object({
     "string.empty": `password cannot be an empty field`,
     "any.required": `missing required password field`,
   }),
-  subscription: Joi.string(),
+  subscription: Joi.string().valid("starter", "pro", "business"),
+});
+
+const subscriptionUpdateSchema = Joi.object({
+  subscription: Joi.string()
+    .valid("starter", "pro", "business")
+    .required()
+    .messages({
+      "any.required": `missing required subscription field`,
+    }),
 });
 
 module.exports = {
   userSchema,
+  subscriptionUpdateSchema,
 };
