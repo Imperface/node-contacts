@@ -1,9 +1,10 @@
 const express = require("express");
 
-const usersCtrl = require("../controllers/users");
+const Ctrl = require("../controllers");
 
 const { validateBody, authenticate } = require("../middlewares");
-const schemas = require("../schemas/users");
+
+const { schemas } = require("../models/user");
 
 const router = express.Router();
 const jsonParser = express.json();
@@ -11,25 +12,25 @@ const jsonParser = express.json();
 router.post(
   "/register",
   jsonParser,
-  validateBody(schemas.userSchema),
-  usersCtrl.register
+  validateBody(schemas.userJOISchema),
+  Ctrl.register
 );
 router.post(
   "/login",
   jsonParser,
-  validateBody(schemas.userSchema),
-  usersCtrl.login
+  validateBody(schemas.userJOISchema),
+  Ctrl.login
 );
-router.post("/logout", authenticate, usersCtrl.logout);
+router.post("/logout", authenticate, Ctrl.logout);
 
-router.get("/current", authenticate, usersCtrl.current);
+router.get("/current", authenticate, Ctrl.current);
 
 router.patch(
   "/",
   authenticate,
   jsonParser,
   validateBody(schemas.subscriptionUpdateSchema),
-  usersCtrl.subscriptionUpdate
+  Ctrl.subscriptionUpdate
 );
 
 module.exports = router;
