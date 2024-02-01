@@ -1,11 +1,7 @@
 const HttpError = require("./HttpError");
-
-const checkDuplicateName = require("./checkName");
-
-const matchId = require("./matchId");
+const handleMongooseError = require("./handleMongooseError");
 
 module.exports = {
   HttpError,
-  checkDuplicateName,
-  matchId,
+  handleMongooseError,
 };
