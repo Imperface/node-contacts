@@ -16,6 +16,9 @@ const accessLogStream = fs.createWriteStream(
 );
 app.use(morgan("tiny", { stream: accessLogStream }));
 
+// set public folder
+app.use(express.static("public"));
+
 // permission cors
 app.use(cors());
 
