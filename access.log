@@ -1182,3 +1182,12 @@ PATCH /api/users/avatars 400 31 - 126.200 ms
 PATCH /api/users/avatars 500 31 - 118.828 ms
 PATCH /api/users/avatars 200 57 - 378.971 ms
 GET /avatars/65c2c659fe72684a3387f789_img1.png 200 25544 - 3.746 ms
+POST /api/users/register 201 134 - 249.871 ms
+PATCH /api/users/avatars 400 31 - 156.015 ms
+PATCH /api/users/avatars 500 31 - 67.719 ms
+PATCH /api/users/avatars 200 57 - 367.186 ms
+POST /api/users/login 200 244 - 317.669 ms
+PATCH /api/users/avatars 400 31 - 353.358 ms
+PATCH /api/users/avatars 200 57 - 493.744 ms
+GET /avatars/65c2c659fe72684a3387f789_img1.png 200 25544 - 3.092 ms
+GET /favicon.ico 404 46 - 2.735 ms

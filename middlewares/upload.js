@@ -1,5 +1,6 @@
 const multer = require("multer");
 const path = require("node:path");
+const { HttpError } = require("../utils");
 const tempDir = path.join(__dirname, "..", "temp");
 
 const multerConfig = multer.diskStorage({
@@ -23,7 +24,7 @@ const upload = multer({
     ) {
       cb(null, true);
     } else {
-      return cb(new Error("Invalid mime type"));
+      return cb(HttpError(400, "Invalid mime type"), false);
     }
   },
 });
