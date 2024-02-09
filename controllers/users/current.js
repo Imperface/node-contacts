@@ -1,8 +1,8 @@
 const current = async (req, res, next) => {
   // get params
-  const { email, subscription } = req.user;
+  const { email, subscription, avatarURL } = req.user;
 
   // send response
-  res.status(200).json({ email, subscription });
+  res.status(200).json({ email, subscription, avatarURL });
 };
 module.exports = current;

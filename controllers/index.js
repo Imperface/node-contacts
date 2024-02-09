@@ -14,6 +14,7 @@ const login = require("./users/login");
 const logout = require("./users/logout");
 const current = require("./users/current");
 const subscriptionUpdate = require("./users/subscriptionUpdate");
+const updateAvatar = require("./users/updateAvatar");
 
 module.exports = {
   listContacts: controllerWrapper(listContacts),
@@ -28,4 +29,5 @@ module.exports = {
   logout: controllerWrapper(logout),
   current: controllerWrapper(current),
   subscriptionUpdate: controllerWrapper(subscriptionUpdate),
+  updateAvatar: controllerWrapper(updateAvatar),
 };

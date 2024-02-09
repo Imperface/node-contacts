@@ -2,7 +2,7 @@ const express = require("express");
 
 const Ctrl = require("../controllers");
 
-const { validateBody, authenticate } = require("../middlewares");
+const { validateBody, authenticate, upload } = require("../middlewares");
 
 const { schemas } = require("../models/user");
 
@@ -31,6 +31,13 @@ router.patch(
   jsonParser,
   validateBody(schemas.subscriptionUpdateSchema),
   Ctrl.subscriptionUpdate
+);
+router.patch(
+  "/avatars",
+  authenticate,
+  upload.single("avatar"),
+
+  Ctrl.updateAvatar
 );
 
 module.exports = router;
