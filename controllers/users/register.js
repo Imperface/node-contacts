@@ -1,6 +1,6 @@
 const bcrypt = require("bcrypt");
-const { randomUUID } = require("crypto");
 const gravatar = require("gravatar");
+const { randomUUID } = require("crypto");
 
 const { BASE_URL } = process.env;
 
@@ -43,6 +43,7 @@ const register = async (req, res, next) => {
     throw HttpError(400, "Bad request");
   }
 
+  // create letter object for sending
   const emailBody = {
     to: email,
     subject: "Verification account",
@@ -50,7 +51,11 @@ const register = async (req, res, next) => {
     text: `Follow the link to verify your account ${BASE_URL}/api/users/verify/${verificationToken}`,
   };
 
+  // send mail
+  await sendEmail(emailBody);
+
   // send response
   res.status(201).json({ user: { email, subscription, avatarURL } });
 };
+
 module.exports = register;

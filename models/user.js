@@ -2,6 +2,7 @@ const Joi = require("joi");
 const { Schema, model } = require("mongoose");
 const { handleMongooseError } = require("../utils");
 const { EMAIL_REGEX, SUBSCRIPTION_VALUE } = require("../constants");
+
 const userSchema = new Schema(
   {
     email: {
@@ -33,6 +34,7 @@ const userSchema = new Schema(
   },
   { versionKey: false, timestamps: true }
 );
+
 userSchema.post("save", handleMongooseError);
 
 const userJOISchema = Joi.object({
@@ -67,10 +69,13 @@ const verifyEmailSchema = Joi.object({
     "string.pattern.base": "wrong email format",
   }),
 });
+
 const schemas = {
   userJOISchema,
   subscriptionUpdateSchema,
   verifyEmailSchema,
 };
+
 const User = model("user", userSchema);
+
 module.exports = { User, schemas };
