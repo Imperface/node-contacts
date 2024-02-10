@@ -15,6 +15,8 @@ const logout = require("./users/logout");
 const current = require("./users/current");
 const subscriptionUpdate = require("./users/subscriptionUpdate");
 const updateAvatar = require("./users/updateAvatar");
+const verify = require("./users/verify");
+const resendVerifyEmail = require("./users/resendVerifyEmail");
 
 module.exports = {
   listContacts: controllerWrapper(listContacts),
@@ -30,4 +32,6 @@ module.exports = {
   current: controllerWrapper(current),
   subscriptionUpdate: controllerWrapper(subscriptionUpdate),
   updateAvatar: controllerWrapper(updateAvatar),
+  verify: controllerWrapper(verify),
+  resendVerifyEmail: controllerWrapper(resendVerifyEmail),
 };

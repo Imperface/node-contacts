@@ -1,8 +1,10 @@
 const bcrypt = require("bcrypt");
-
+const { randomUUID } = require("crypto");
 const gravatar = require("gravatar");
 
-const { HttpError } = require("../../utils");
+const { BASE_URL } = process.env;
+
+const { HttpError, sendEmail } = require("../../utils");
 
 const { User } = require("../../models/user");
 
@@ -21,19 +23,32 @@ const register = async (req, res, next) => {
   // hash password
   const hashedPassword = await bcrypt.hash(password, 10);
 
+  // get avatarURL from gravatar
   const avatarURL = gravatar.url(email);
+
+  // generate verificationToken
+  const verificationToken = randomUUID();
+
   // create user
   const registeredUser = await User.create({
     email,
     subscription,
     password: hashedPassword,
     avatarURL,
+    verificationToken,
   });
 
   // throw error if user not created
   if (registeredUser === null) {
     throw HttpError(400, "Bad request");
   }
+
+  const emailBody = {
+    to: email,
+    subject: "Verification account",
+    html: `Follow the <a href = "${BASE_URL}/api/users/verify/${verificationToken}" rel="noopener noreferrer" target = "_blank">link</a> to verify your account`,
+    text: `Follow the link to verify your account ${BASE_URL}/api/users/verify/${verificationToken}`,
+  };
 
   // send response
   res.status(201).json({ user: { email, subscription, avatarURL } });
