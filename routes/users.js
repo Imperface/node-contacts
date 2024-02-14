@@ -15,6 +15,16 @@ router.post(
   validateBody(schemas.userJOISchema),
   Ctrl.register
 );
+
+router.get("/verify/:verificationToken", Ctrl.verify);
+
+router.post(
+  "/verify",
+  jsonParser,
+  validateBody(schemas.verifyEmailSchema),
+  Ctrl.resendVerifyEmail
+);
+
 router.post(
   "/login",
   jsonParser,
@@ -32,11 +42,11 @@ router.patch(
   validateBody(schemas.subscriptionUpdateSchema),
   Ctrl.subscriptionUpdate
 );
+
 router.patch(
   "/avatars",
   authenticate,
   upload.single("avatar"),
-
   Ctrl.updateAvatar
 );
 

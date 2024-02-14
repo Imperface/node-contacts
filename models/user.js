@@ -2,6 +2,7 @@ const Joi = require("joi");
 const { Schema, model } = require("mongoose");
 const { handleMongooseError } = require("../utils");
 const { EMAIL_REGEX, SUBSCRIPTION_VALUE } = require("../constants");
+
 const userSchema = new Schema(
   {
     email: {
@@ -22,13 +23,22 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
+    },
   },
   { versionKey: false, timestamps: true }
 );
+
 userSchema.post("save", handleMongooseError);
 
 const userJOISchema = Joi.object({
-  email: Joi.string().required().messages({
+  email: Joi.string().pattern(EMAIL_REGEX).required().messages({
     "string.base": `email should be a type of 'string'`,
     "string.empty": `email cannot be an empty field`,
     "any.required": `missing required email field`,
@@ -51,9 +61,21 @@ const subscriptionUpdateSchema = Joi.object({
     }),
 });
 
+const verifyEmailSchema = Joi.object({
+  email: Joi.string().pattern(EMAIL_REGEX).required().messages({
+    "string.base": `email should be a type of 'string'`,
+    "string.empty": `email cannot be an empty field`,
+    "any.required": `missing required email field`,
+    "string.pattern.base": "wrong email format",
+  }),
+});
+
 const schemas = {
   userJOISchema,
   subscriptionUpdateSchema,
+  verifyEmailSchema,
 };
+
 const User = model("user", userSchema);
+
 module.exports = { User, schemas };
